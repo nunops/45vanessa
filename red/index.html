@@ -149,6 +149,17 @@
       100% { box-shadow: 0 0 0 0 rgba(239, 35, 60, 0); }
     }
 
+    .on-air .live-dot {
+      background: var(--white);
+      animation: pulseLight 1.5s infinite;
+    }
+
+    @keyframes pulseLight {
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.85); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+
     .nav-actions {
       display: flex;
       gap: 10px;
@@ -243,6 +254,10 @@
       text-shadow: 4px 4px 0 var(--white), 7px 7px 0 rgba(36, 31, 33, 0.12);
       animation: headlinePop 4.6s ease-in-out infinite;
       transform-origin: center bottom;
+    }
+
+    .h1-num {
+      display: block;
     }
 
     @keyframes headlinePop {
@@ -430,7 +445,7 @@
 
     .portrait-stage.has-image {
       background-size: cover;
-      background-position: center 70%;
+      background-position: center 18%;
     }
 
     .portrait-img {
@@ -1304,6 +1319,54 @@
         grid-template-columns: 1fr;
       }
 
+      /* "achatar" a coluna esquerda para reorder com a foto */
+      .hero > div {
+        display: contents;
+      }
+
+      .hero .eyebrow {
+        order: 1;
+        margin-bottom: 4px;
+      }
+
+      .hero .broadcast-card {
+        order: 2;
+      }
+
+      .hero h1 {
+        order: 3;
+        margin-top: 12px;
+      }
+
+      .hero .hero-copy {
+        order: 4;
+      }
+
+      .hero .cta-row {
+        order: 5;
+      }
+
+      .h1-num {
+        display: inline-block;
+        margin-left: 0.12em;
+      }
+
+      h1 {
+        font-size: clamp(44px, 12vw, 74px);
+      }
+
+      .eyebrow {
+        flex-wrap: wrap;
+        gap: clamp(4px, 1.5vw, 10px);
+      }
+
+      .eyebrow .tag {
+        padding: clamp(6px, 1.6vw, 9px) clamp(9px, 2.6vw, 13px);
+        font-size: clamp(10px, 2.7vw, 12px);
+        letter-spacing: clamp(0.04em, 0.5vw, 0.07em);
+        white-space: nowrap;
+      }
+
       .broadcast-card {
         min-height: 560px;
       }
@@ -1342,10 +1405,6 @@
 
       .hero {
         padding-top: 42px;
-      }
-
-      h1 {
-        font-size: clamp(58px, 18vw, 94px);
       }
 
       .field-grid {
@@ -1405,7 +1464,7 @@
           <span class="tag">Vanessa edition</span>
         </div>
 
-        <h1><span class="headline-script">Vanessa</span><br />45</h1>
+        <h1><span class="headline-script">Vanessa</span><span class="h1-num">45</span></h1>
 
         <p class="hero-copy">
           Boa onda, música e muita alegria. No dia <strong>6 de Junho</strong>, a partir das <strong>19h</strong>, o Restaurante do Clube de Ténis do Estoril transforma-se no cenário oficial de uma noite feita de amigos, brindes e bons momentos.
