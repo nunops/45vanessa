@@ -1216,6 +1216,73 @@
       margin-bottom: 14px;
     }
 
+    .presence-picker {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .presence-option {
+      display: block;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .presence-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      height: 0;
+    }
+
+    .presence-pill {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      padding: 14px 16px;
+      border: 2px solid rgba(36, 31, 33, 0.14);
+      border-radius: 18px;
+      background: var(--white);
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+    }
+
+    .presence-pill strong {
+      font-size: 15px;
+      font-weight: 950;
+      color: var(--ink);
+      text-transform: none;
+      letter-spacing: -0.01em;
+    }
+
+    .presence-pill small {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .presence-option input[type="radio"]:checked + .presence-pill {
+      border-color: var(--red);
+      background: var(--pink);
+    }
+
+    .presence-option:hover .presence-pill {
+      transform: translateY(-2px);
+      border-color: rgba(36, 31, 33, 0.28);
+    }
+
+    .presence-option input[type="radio"]:focus-visible + .presence-pill {
+      outline: 3px solid rgba(239, 35, 60, 0.35);
+      outline-offset: 2px;
+    }
+
+    #rsvpForm.depois .cond-jantar {
+      display: none;
+    }
+
     label {
       display: block;
       margin-bottom: 8px;
@@ -1686,11 +1753,31 @@
           <div class="form-copy">
             <h2>Confirma aqui</h2>
             <p>
-              A régie precisa de fechar o alinhamento. Preenche os dados, confirma acompanhantes e paga por MBWay à Vanessa. <strong>A presença só fica garantida depois do pagamento.</strong>
+              A régie precisa de fechar o alinhamento. Preenche os dados e confirma. <strong>Quem vai ao jantar paga por MBWay à Vanessa</strong> para garantir o lugar.
             </p>
           </div>
 
           <form id="rsvpForm">
+            <div class="field presence-picker-field">
+              <label>Vens ao jantar ou apareces só depois?</label>
+              <div class="presence-picker">
+                <label class="presence-option">
+                  <input type="radio" name="presenca" value="jantar" checked />
+                  <span class="presence-pill">
+                    <strong>Vou ao jantar</strong>
+                    <small>chegada às 19h</small>
+                  </span>
+                </label>
+                <label class="presence-option">
+                  <input type="radio" name="presenca" value="depois" />
+                  <span class="presence-pill">
+                    <strong>Apareço só depois</strong>
+                    <small>sem jantar</small>
+                  </span>
+                </label>
+              </div>
+            </div>
+
             <div class="field-grid">
               <div class="field">
                 <label for="nome">Nome</label>
@@ -1715,7 +1802,7 @@
               <input id="nome_extra" name="nome_extra" type="text" placeholder="Se levares alguém, diz quem vem contigo" />
             </div>
 
-            <div class="field-grid">
+            <div class="field-grid cond-jantar">
               <div class="field">
                 <label for="criancas">Crianças (e idades)</label>
                 <input id="criancas" name="criancas" type="text" placeholder="Ex: 1 com 8 anos, 1 com 4 anos" />
@@ -1746,14 +1833,14 @@
             <input type="hidden" name="hora_evento" value="19h" />
             <input type="hidden" name="local" value="Restaurante Clube de Ténis do Estoril" />
 
-            <div class="payment-block">
+            <div class="payment-block cond-jantar">
               <span class="pm-tag">MBWay</span>
               <span class="pm-number">+351 962 961 115</span>
               <span class="pm-detail"><strong>A confirmação só fica efetivada após o pagamento por MBWay.</strong><br />Adultos 35€ · 6 aos 10 anos 17,50€ · até aos 6 não pagam.</span>
             </div>
 
             <button class="btn btn-primary" type="submit" id="submitBtn">Confirmar presença em direto</button>
-            <p class="submit-note">Depois de submeter, envia o pagamento por MBWay para o <strong>+351 962 961 115</strong>. Sem pagamento, o lugar não fica reservado.</p>
+            <p class="submit-note cond-jantar">Depois de submeter, envia o pagamento por MBWay para o <strong>+351 962 961 115</strong>. Sem pagamento, o lugar não fica reservado.</p>
             <div class="status" id="formStatus"></div>
           </form>
         </div>
@@ -1786,6 +1873,15 @@
     const form = document.getElementById("rsvpForm");
     const submitBtn = document.getElementById("submitBtn");
     const statusBox = document.getElementById("formStatus");
+
+    function updatePresence() {
+      const value = form.querySelector('input[name="presenca"]:checked')?.value || "jantar";
+      form.classList.toggle("depois", value === "depois");
+    }
+    form.querySelectorAll('input[name="presenca"]').forEach((r) =>
+      r.addEventListener("change", updatePresence)
+    );
+    updatePresence();
 
     function showStatus(type, message) {
       statusBox.className = "status " + type;
